@@ -117,7 +117,7 @@ export default class Collapsible extends Component {
   }
 
   _transitionToHeight(height) {
-    const { duration } = this.props;
+    const { duration,collapsed } = this.props;
     let easing = this.props.easing;
     if (typeof easing === 'string') {
       let prefix;
@@ -141,13 +141,14 @@ export default class Collapsible extends Component {
         throw new Error('Invalid easing type "' + this.props.easing + '"');
       }
     }
-
     if (this._animation) {
       this._animation.stop();
     }
     this.setState({ animating: true });
+    
+    const collapsedHeight = collapsed ? 0 : 257.666
     this._animation = Animated.timing(this.state.height, {
-      toValue: height,
+      toValue: height ? height : collapsedHeight,
       duration,
       easing,
     }).start(() => {
